@@ -1,14 +1,14 @@
-import { render, createCell } from 'web-cell';
+import { DOMRenderer } from 'dom-renderer';
 
 import {
     CommandLine,
-    GithubRepository,
+    GithubEvents,
     GithubIssue,
     GithubProfile,
-    GithubEvents
+    GithubRepository
 } from '../source';
 
-render(
+new DOMRenderer().render(
     <main className="container">
         <h1>GitHub Web Widget</h1>
 
