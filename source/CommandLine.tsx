@@ -1,12 +1,14 @@
 import { observable } from 'mobx';
 import { WebCellProps, attribute, component, observer } from 'web-cell';
 
-@component({
-    tagName: 'command-line'
-})
+export interface CommandLineProps extends WebCellProps {
+    text: string;
+}
+
+@component({ tagName: 'command-line' })
 @observer
 export class CommandLine extends HTMLElement {
-    declare props: WebCellProps;
+    declare props: CommandLineProps;
 
     @attribute
     @observable
@@ -16,9 +18,9 @@ export class CommandLine extends HTMLElement {
     @observable
     accessor shownIndex = 0;
 
-    get text() {
-        return this.children.join('').trim();
-    }
+    @attribute
+    @observable
+    accessor text = '';
 
     connectedCallback() {
         this.classList.add(
@@ -44,7 +46,7 @@ export class CommandLine extends HTMLElement {
 
             if (!text) return;
 
-            let { shownIndex } = this;
+            const { shownIndex } = this;
 
             this.shownIndex++;
 
@@ -70,12 +72,12 @@ export class CommandLine extends HTMLElement {
 
         return (
             <>
-                <span style={{ userSelect: 'none' }}>$</span>
+                <span className="user-select-none">$</span>
 
                 <kbd className="bg-dark">{text.slice(0, shownIndex)}</kbd>
 
                 <small
-                    className="badge badge-success"
+                    className="badge bg-success"
                     style={{
                         opacity: active ? '1' : '0',
                         transition: '0.25s'

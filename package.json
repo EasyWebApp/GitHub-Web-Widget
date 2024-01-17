@@ -1,6 +1,6 @@
 {
     "name": "github-web-widget",
-    "version": "3.0.0-beta.9",
+    "version": "4.0.0-rc.0",
     "description": "Web Components library for GitHub based on WebCell",
     "keywords": [
         "github",
@@ -25,10 +25,10 @@
     "module": "dist/index.js",
     "scripts": {
         "prepare": "husky install",
-        "start": "cd test/  &&  parcel index.html -d ../docs/demo/ --open",
-        "pack-demo": "cd test/  &&  parcel build index.html --public-url . -d ../docs/demo/",
+        "start": "rm -rf .parcel-cache/ docs/demo/  &&  cd test/  &&  parcel index.html --dist-dir ../docs/demo/ --open",
+        "pack-demo": "cd test/  &&  parcel build index.html --public-url . --dist-dir ../docs/demo/",
         "test": "lint-staged",
-        "pack-dist": "cross-env NODE_ENV=build  microbundle --external web-cell,classnames,marked,koajax,prismjs,.+\\.png --globals web-cell=WebCell,classnames=classNames,koajax=KoAJAX,prismjs=Prism --name GithubWebWidget --css-modules true",
+        "pack-dist": "rm -rf .parcel-cache/ dist/  &&  parcel build",
         "pack-docs": "rm -rf docs/  &&  typedoc source/  &&  npm run pack-demo",
         "build": "rm -rf dist/  &&  npm run pack-dist  &&  npm run pack-docs",
         "help": "npm run pack-docs  &&  open-cli docs/index.html",
@@ -48,7 +48,13 @@
     },
     "devDependencies": {
         "@octokit/openapi-types": "^19.1.0",
+        "@parcel/config-default": "~2.11.0",
+        "@parcel/packager-ts": "~2.11.0",
+        "@parcel/transformer-less": "~2.11.0",
+        "@parcel/transformer-typescript-tsc": "~2.11.0",
+        "@parcel/transformer-typescript-types": "~2.11.0",
         "@types/prismjs": "^1.26.3",
+        "@typescript-eslint/eslint-plugin": "^6.19.0",
         "@typescript-eslint/parser": "^6.19.0",
         "cross-env": "^7.0.3",
         "element-internals-polyfill": "^1.3.10",
@@ -58,9 +64,10 @@
         "iterable-observer": "^1.0.1",
         "lint-staged": "^15.2.0",
         "open-cli": "^8.0.0",
-        "parcel": "^2.11.0",
+        "parcel": "~2.11.0",
         "prettier": "^3.2.2",
         "typedoc": "^0.25.7",
+        "typedoc-plugin-mdn-links": "^3.1.12",
         "typescript": "~5.3.3",
         "web-utility": "^4.1.3"
     },

@@ -2,8 +2,8 @@
 
 [Web Components][1] library for GitHub based on [WebCell][2]
 
-[![NPM Dependency](https://david-dm.org/TechQuery/GitHub-Web-Widget.svg)][3]
-[![CI & CD](https://github.com/EasyWebApp/GitHub-Web-Widget/workflows/CI%20&%20CD/badge.svg)][4]
+[![NPM Dependency](https://img.shields.io/librariesio/github/TechQuery/GitHub-Web-Widget.svg)][3]
+[![CI & CD](https://github.com/TechQuery/GitHub-Web-Widget/actions/workflows/main.yml/badge.svg)][4]
 
 [![NPM](https://nodei.co/npm/github-web-widget.png?downloads=true&downloadRank=true&stars=true)][5]
 
@@ -21,56 +21,93 @@ https://tech-query.me/GitHub-Web-Widget/demo/
 
 ## Usage
 
+### Installation
+
 ```shell
-npm install github-web-widget
+npm install dom-renderer web-cell github-web-widget
+npm install parcel @parcel/config-default @parcel/transformer-typescript-tsc -D
 ```
 
-[`source/index.html`][12]
+### `package.json`
+
+```json
+{
+    "scripts": {
+        "start": "parcel source/index.html --open",
+        "build": "parcel build source/index.html --public-url ."
+    }
+}
+```
+
+### `tsconfig.json`
+
+```json
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "ES2020",
+        "moduleResolution": "Node",
+        "useDefineForClassFields": true,
+        "jsx": "react-jsx",
+        "jsxImportSource": "dom-renderer"
+    }
+}
+```
+
+### `.parcelrc`
+
+```json
+{
+    "extends": "@parcel/config-default",
+    "transformers": {
+        "*.{ts,tsx}": ["@parcel/transformer-typescript-tsc"]
+    }
+}
+```
+
+### [`source/index.html`][12]
 
 ```html
-<!DOCTYPE html>
+<!doctype html>
 <html>
     <head>
         <title>Your Blog</title>
         <link
             rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+            href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css"
         />
         <link
             rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css"
+            href="https://unpkg.com/github-markdown-css@5.5.0/github-markdown.css"
         />
         <link
             rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism-okaidia.css"
+            href="https://unpkg.com/prismjs@1.29.0/themes/prism-okaidia.css"
         />
-        <script
-            crossorigin
-            src="https://polyfill.app/api/polyfill?features=es.string.match-all,es.array.flat,es.object.from-entries,intersection-observer"
-        ></script>
-        <script src="https://cdn.jsdelivr.net/npm/details-element-polyfill@2.4.0/dist/details-element-polyfill.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2.5.0/custom-elements-es5-adapter.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2.5.0/webcomponents-bundle.js"></script>
+        <script src="https://polyfill.web-cell.dev/feature/ECMAScript.js"></script>
+        <script src="https://polyfill.web-cell.dev/feature/WebComponents.js"></script>
+        <script src="https://polyfill.web-cell.dev/feature/ElementInternals.js"></script>
+        <script src="https://polyfill.web-cell.dev/feature/Detail.js"></script>
     </head>
     <body>
-        <script src="index.tsx"></script>
+        <script type="module" src="index.tsx"></script>
     </body>
 </html>
 ```
 
-[`source/index.tsx`][13]
+### [`source/index.tsx`][13]
 
-```JavaScript
-import { render, createCell } from 'web-cell';
+```tsx
+import { DOMRenderer } from 'dom-renderer';
 import {
     CommandLine,
     GithubRepository,
     GithubIssue,
     GithubProfile,
     GithubEvents
-} from 'github-web-widget/source';
+} from 'github-web-widget';
 
-render(
+new DOMRenderer().render(
     <main className="container">
         <h1>GitHub Web Widget</h1>
 
@@ -108,8 +145,8 @@ render(
 
 [1]: https://www.webcomponents.org/
 [2]: https://web-cell.dev/
-[3]: https://david-dm.org/TechQuery/GitHub-Web-Widget
-[4]: https://github.com/EasyWebApp/WebCell/actions
+[3]: https://libraries.io/npm/github-web-widget
+[4]: https://github.com/EasyWebApp/GitHub-Web-Widget/actions/workflows/main.yml
 [5]: https://nodei.co/npm/github-web-widget/
 [6]: https://tech-query.me/GitHub-Web-Widget/classes/commandline.commandline-1.html
 [7]: https://tech-query.me/GitHub-Web-Widget/interfaces/profile.githubprofileprops.html

@@ -11,18 +11,16 @@ import {
 } from './service';
 import { parseMarkDown } from './utility';
 
-import style from './common.less';
+import * as style from './common.module.less';
 
 export interface GithubIssueProps extends WebCellProps {
     owner: string;
     repository: string;
-    issue: number;
-    pull: number;
+    issue?: number;
+    pull?: number;
 }
 
-@component({
-    tagName: 'github-issue'
-})
+@component({ tagName: 'github-issue' })
 @observer
 export class GithubIssue extends HTMLElement {
     declare props: GithubIssueProps;
@@ -44,7 +42,7 @@ export class GithubIssue extends HTMLElement {
     accessor pull = 0;
 
     @observable
-    currentIssue = {
+    accessor currentIssue = {
         state: 'open' as Issue['state'],
         title: '',
         body: '',
@@ -119,7 +117,7 @@ export class GithubIssue extends HTMLElement {
                 <div className="flex-grow-1">
                     <h3>
                         <span
-                            className={`badge badge-${IssueState[state]} mr-3`}
+                            className={`badge badge-${IssueState[state]} me-3`}
                         >
                             {state}
                         </span>

@@ -2,16 +2,14 @@ import { observable } from 'mobx';
 import { WebCellProps, attribute, component, observer } from 'web-cell';
 
 import { Owner, Repository, getOwner, getRepositories } from '../service';
-import style from './index.less';
+import * as style from './index.module.less';
 
 export interface GithubProfileProps extends WebCellProps {
     user?: string;
     organization?: string;
 }
 
-@component({
-    tagName: 'github-profile'
-})
+@component({ tagName: 'github-profile' })
 @observer
 export class GithubProfile extends HTMLElement {
     declare props: GithubProfileProps;
@@ -25,7 +23,7 @@ export class GithubProfile extends HTMLElement {
     accessor organization = '';
 
     @observable
-    currentOwner = {
+    accessor currentOwner = {
         login: '',
         name: '',
         avatar_url: '',

@@ -2,7 +2,7 @@ import { LinkHeader } from 'koajax';
 import { observable } from 'mobx';
 import { WebCellProps, attribute, component, observer } from 'web-cell';
 
-import style from './common.less';
+import * as style from './common.module.less';
 import { Event, client, getEvents } from './service';
 
 export interface GithubEventsProps extends WebCellProps {
@@ -11,9 +11,7 @@ export interface GithubEventsProps extends WebCellProps {
     repository?: string;
 }
 
-@component({
-    tagName: 'github-events'
-})
+@component({ tagName: 'github-events' })
 @observer
 export class GithubEvents extends HTMLElement {
     declare props: GithubEventsProps;
@@ -120,10 +118,10 @@ export class GithubEvents extends HTMLElement {
                         {repo.name}
                     </a>
                 </h4>
-                <time className="pr-1" dateTime={created_at}>
+                <time className="pe-1" dateTime={created_at}>
                     {new Date(created_at).toLocaleString()}
                 </time>
-                <strong className="pr-1">
+                <strong className="pe-1">
                     {payload.action || type.replace('Event', '')}
                 </strong>
                 {this.renderPayload(payload)}

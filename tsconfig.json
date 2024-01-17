@@ -8,6 +8,7 @@
         "jsx": "react-jsx",
         "jsxImportSource": "dom-renderer",
         "lib": ["ES2020", "DOM"],
+        "skipLibCheck": true,
         "target": "ES6",
         "sourceMap": true,
         "declaration": true,
@@ -19,6 +20,6 @@
         "excludeExternals": true,
         "excludePrivate": true,
         "readme": "./ReadMe.md",
-        "out": "docs/"
+        "plugin": ["typedoc-plugin-mdn-links"]
     }
 }

@@ -19,7 +19,7 @@ yarn.lock
 
 # Bundle
 dist/
-.cache/
+.parcel-cache/
 docs/
 
 # IDE

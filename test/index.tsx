@@ -1,4 +1,5 @@
 import { DOMRenderer } from 'dom-renderer';
+import { configure } from 'mobx';
 
 import {
     CommandLine,
@@ -8,13 +9,15 @@ import {
     GithubRepository
 } from '../source';
 
+configure({ enforceActions: 'never' });
+
 new DOMRenderer().render(
     <main className="container">
         <h1>GitHub Web Widget</h1>
 
         <section>
             <h2>Command Line</h2>
-            <CommandLine>npm install github-web-widget</CommandLine>
+            <CommandLine text="npm install github-web-widget" />
         </section>
 
         <section>

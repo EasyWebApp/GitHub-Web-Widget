@@ -2,10 +2,10 @@ interface SymbolConstructor {
     readonly observable: unique symbol;
 }
 
-declare module '*.less' {
-    const content: any;
+declare module '*.module.less' {
+    const content: Record<string, string>;
 
-    export default content;
+    export = content;
 }
 
 declare module '*.png' {
