@@ -1,56 +1,48 @@
-import {
-    WebCellProps,
-    component,
-    mixin,
-    watch,
-    attribute,
-    createCell
-} from 'web-cell';
+import { observable } from 'mobx';
+import { WebCellProps, attribute, component, observer } from 'web-cell';
 
-import { parseMarkDown } from './utility';
 import {
-    Issue,
-    Repository,
-    IssueState,
     Comment,
+    Issue,
+    IssueState,
+    Repository,
     getIssue,
     getRepository
 } from './service';
+import { parseMarkDown } from './utility';
 
-import style from './common.less';
+import * as style from './common.module.less';
 
 export interface GithubIssueProps extends WebCellProps {
     owner: string;
     repository: string;
-    issue: number;
-    pull: number;
+    issue?: number;
+    pull?: number;
 }
 
-@component({
-    tagName: 'github-issue',
-    renderTarget: 'children'
-})
-export class GithubIssue extends mixin<
-    GithubIssueProps,
-    Partial<Issue & { repository: Repository }>
->() {
-    @attribute
-    @watch
-    owner = '';
+@component({ tagName: 'github-issue' })
+@observer
+export class GithubIssue extends HTMLElement {
+    declare props: GithubIssueProps;
 
     @attribute
-    @watch
-    repository = '';
+    @observable
+    accessor owner = '';
 
     @attribute
-    @watch
-    issue = 0;
+    @observable
+    accessor repository = '';
 
     @attribute
-    @watch
-    pull = 0;
+    @observable
+    accessor issue = 0;
 
-    state = {
+    @attribute
+    @observable
+    accessor pull = 0;
+
+    @observable
+    accessor currentIssue = {
         state: 'open' as Issue['state'],
         title: '',
         body: '',
@@ -59,11 +51,9 @@ export class GithubIssue extends mixin<
         html_url: '',
         comment_list: [] as Comment[],
         repository: {} as Repository
-    };
+    } as Issue & { repository: Repository };
 
     async connectedCallback() {
-        super.connectedCallback();
-
         const issue = await getIssue(
                 this.owner,
                 this.repository,
@@ -72,7 +62,7 @@ export class GithubIssue extends mixin<
             ),
             repository = await getRepository(this.owner, this.repository);
 
-        this.setState({ ...issue, repository });
+        this.currentIssue = { ...issue, repository };
     }
 
     renderComment({ user, created_at, body }: Partial<Comment>, top?: boolean) {
@@ -111,7 +101,7 @@ export class GithubIssue extends mixin<
             body,
             comment_list,
             repository: { owner }
-        } = this.state;
+        } = this.currentIssue;
 
         return (
             <div className="d-flex my-4">
@@ -127,7 +117,7 @@ export class GithubIssue extends mixin<
                 <div className="flex-grow-1">
                     <h3>
                         <span
-                            className={`badge badge-${IssueState[state]} mr-3`}
+                            className={`badge badge-${IssueState[state]} me-3`}
                         >
                             {state}
                         </span>

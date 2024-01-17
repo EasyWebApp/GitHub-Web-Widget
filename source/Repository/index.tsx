@@ -1,15 +1,8 @@
-import {
-    WebCellProps,
-    component,
-    mixin,
-    watch,
-    attribute,
-    createCell
-} from 'web-cell';
+import { observable } from 'mobx';
+import { WebCellProps, attribute, component, observer } from 'web-cell';
 
 import { Repository, getRepository } from '../service';
-
-import style from './index.less';
+import * as style from './index.module.less';
 import icon_repo from './repository.png';
 import icon_status from './watch-fork.png';
 
@@ -18,23 +11,21 @@ export interface GithubRepositoryProps extends WebCellProps {
     repository: string;
 }
 
-@component({
-    tagName: 'github-repository',
-    renderTarget: 'children'
-})
-export class GithubRepository extends mixin<
-    GithubRepositoryProps,
-    Partial<Repository>
->() {
-    @attribute
-    @watch
-    owner = 'TechQuery';
+@component({ tagName: 'github-repository' })
+@observer
+export class GithubRepository extends HTMLElement {
+    declare props: GithubRepositoryProps;
 
     @attribute
-    @watch
-    repository = 'GitHub-Web-Widget';
+    @observable
+    accessor owner = 'TechQuery';
 
-    state = {
+    @attribute
+    @observable
+    accessor repository = 'GitHub-Web-Widget';
+
+    @observable
+    accessor currentRepository = {
         owner: {} as Repository['owner'],
         name: this.repository,
         full_name: `${this.owner}/${this.repository}`,
@@ -46,14 +37,13 @@ export class GithubRepository extends mixin<
         watchers: 0,
         forks: 0,
         html_url: ''
-    };
+    } as Partial<Repository>;
 
     async connectedCallback() {
-        super.connectedCallback();
-
-        const data = await getRepository(this.owner, this.repository);
-
-        this.setState(data);
+        this.currentRepository = await getRepository(
+            this.owner,
+            this.repository
+        );
     }
 
     render() {
@@ -69,13 +59,13 @@ export class GithubRepository extends mixin<
             homepage,
             default_branch,
             pushed_at
-        } = this.state;
+        } = this.currentRepository;
 
         return (
             <main className={style['github-box']}>
                 <div className={style['github-box-title']}>
                     <h3 className="p-2">
-                        <img className="pr-1" src={icon_repo} />
+                        <img className="pe-1" src={icon_repo} />
                         <a
                             target="_blank"
                             href={owner.html_url}
@@ -85,7 +75,7 @@ export class GithubRepository extends mixin<
                         </a>
                         <span>/</span>
                         <a
-                            className="font-weight-bold"
+                            className="fw-bold"
                             target="_blank"
                             href={html_url}
                             title={`GitHub Homepage of ${full_name}`}
@@ -126,7 +116,7 @@ export class GithubRepository extends mixin<
                             </a>
                         )}
                     </p>
-                    <p className="m-0 font-weight-bold">
+                    <p className="m-0 fw-bold">
                         <a target="_blank" href={homepage}>
                             {homepage}
                         </a>
@@ -135,7 +125,7 @@ export class GithubRepository extends mixin<
                 <div className={style['github-box-download']}>
                     <div className={style['updated']}>
                         Latest commit to the
-                        <strong className="font-weight-bold text-dark px-1">
+                        <strong className="fw-bold text-dark px-1">
                             {default_branch}
                         </strong>
                         branch on

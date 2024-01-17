@@ -1,21 +1,26 @@
-import { WebCellProps, component, mixin, createCell, Fragment } from 'web-cell';
+import { observable } from 'mobx';
+import { WebCellProps, attribute, component, observer } from 'web-cell';
 
-@component({
-    tagName: 'command-line',
-    renderTarget: 'children'
-})
-export class CommandLine extends mixin<
-    WebCellProps,
-    { active?: boolean; shownIndex?: number }
->() {
-    state = {
-        active: false,
-        shownIndex: 0
-    };
+export interface CommandLineProps extends WebCellProps {
+    text: string;
+}
 
-    get text() {
-        return this.defaultSlot.join('').trim();
-    }
+@component({ tagName: 'command-line' })
+@observer
+export class CommandLine extends HTMLElement {
+    declare props: CommandLineProps;
+
+    @attribute
+    @observable
+    accessor active = false;
+
+    @attribute
+    @observable
+    accessor shownIndex = 0;
+
+    @attribute
+    @observable
+    accessor text = '';
 
     connectedCallback() {
         this.classList.add(
@@ -27,10 +32,9 @@ export class CommandLine extends mixin<
         );
         this.tabIndex = -1;
         this.addEventListener('click', this.autoCopy);
-        this.addEventListener('focus', () => this.setState({ active: true }));
-        this.addEventListener('blur', () => this.setState({ active: false }));
+        this.addEventListener('focus', () => (this.active = true));
+        this.addEventListener('blur', () => (this.active = false));
 
-        super.connectedCallback();
         this.boot();
     }
 
@@ -42,9 +46,9 @@ export class CommandLine extends mixin<
 
             if (!text) return;
 
-            let { shownIndex } = this.state;
+            const { shownIndex } = this;
 
-            await this.setState({ shownIndex: ++shownIndex });
+            this.shownIndex++;
 
             if (shownIndex >= text.length) self.clearInterval(this.timer);
         }, 100);
@@ -64,16 +68,16 @@ export class CommandLine extends mixin<
 
     render() {
         const { text } = this,
-            { shownIndex, active } = this.state;
+            { shownIndex, active } = this;
 
         return (
-            <Fragment>
-                <span style={{ userSelect: 'none' }}>$</span>
+            <>
+                <span className="user-select-none">$</span>
 
                 <kbd className="bg-dark">{text.slice(0, shownIndex)}</kbd>
 
                 <small
-                    className="badge badge-success"
+                    className="badge bg-success"
                     style={{
                         opacity: active ? '1' : '0',
                         transition: '0.25s'
@@ -81,7 +85,7 @@ export class CommandLine extends mixin<
                 >
                     Copied !
                 </small>
-            </Fragment>
+            </>
         );
     }
 }

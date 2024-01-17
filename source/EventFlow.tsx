@@ -1,17 +1,9 @@
-import {
-    WebCellProps,
-    component,
-    mixin,
-    watch,
-    attribute,
-    createCell,
-    Fragment
-} from 'web-cell';
 import { LinkHeader } from 'koajax';
+import { observable } from 'mobx';
+import { WebCellProps, attribute, component, observer } from 'web-cell';
 
-import { Event, getEvents, client } from './service';
-
-import style from './common.less';
+import * as style from './common.module.less';
+import { Event, client, getEvents } from './service';
 
 export interface GithubEventsProps extends WebCellProps {
     user?: string;
@@ -19,30 +11,28 @@ export interface GithubEventsProps extends WebCellProps {
     repository?: string;
 }
 
-@component({
-    tagName: 'github-events',
-    renderTarget: 'children'
-})
-export class GithubEvents extends mixin<
-    GithubEventsProps,
-    { list: Event[] }
->() {
-    @attribute
-    @watch
-    user = '';
+@component({ tagName: 'github-events' })
+@observer
+export class GithubEvents extends HTMLElement {
+    declare props: GithubEventsProps;
 
     @attribute
-    @watch
-    organization = 'EasyWebApp';
+    @observable
+    accessor user = '';
 
     @attribute
-    @watch
-    repository = '';
+    @observable
+    accessor organization = 'EasyWebApp';
 
-    @watch
-    end = false;
+    @attribute
+    @observable
+    accessor repository = '';
 
-    state = { list: [] as Event[] };
+    @observable
+    accessor end = false;
+
+    @observable
+    accessor list: Event[] = [];
 
     private loading = false;
     private nextPage = '';
@@ -59,7 +49,7 @@ export class GithubEvents extends mixin<
         if (next) this.nextPage = next.URI;
         else this.end = true;
 
-        await this.setState({ list: this.state.list.concat(body) });
+        this.list = [...this.list, ...body];
 
         this.loading = false;
     }
@@ -71,7 +61,7 @@ export class GithubEvents extends mixin<
             } else observer.disconnect();
         }).observe(bottom);
 
-    renderPayload({
+    renderPayload = ({
         ref,
         master_branch,
         issue,
@@ -79,77 +69,68 @@ export class GithubEvents extends mixin<
         release,
         member,
         pages
-    }: Event['payload']) {
-        return (
-            <Fragment>
-                <a
-                    target="_blank"
-                    href={
-                        (issue || pull_request || release || member)?.html_url
-                    }
-                >
-                    {ref ||
-                        master_branch ||
-                        (issue || pull_request)?.title ||
-                        release?.name ||
-                        member?.login}
-                </a>
-                <ol>
-                    {pages?.map(({ action, html_url, summary, sha, title }) => (
-                        <li>
-                            {action}
-                            <a
-                                target="_blank"
-                                href={html_url}
-                                title={summary || sha}
-                            >
-                                {title}
-                            </a>
-                        </li>
-                    ))}
-                </ol>
-            </Fragment>
-        );
-    }
-
-    renderEvent = ({ actor, repo, created_at, payload, type }: Event) => {
-        return (
-            <li className="d-flex align-items-center my-3">
-                <a
-                    className="text-center w-25"
-                    target="_blank"
-                    href={`https://github.com/${actor.login}`}
-                    title={actor.login}
-                >
-                    <img
-                        className={`${style.logo} ${style.big}`}
-                        src={actor.avatar_url}
-                    />
-                    <div>{actor.display_login}</div>
-                </a>
-                <div>
-                    <h4>
+    }: Event['payload']) => (
+        <>
+            <a
+                target="_blank"
+                href={(issue || pull_request || release || member)?.html_url}
+            >
+                {ref ||
+                    master_branch ||
+                    (issue || pull_request)?.title ||
+                    release?.name ||
+                    member?.login}
+            </a>
+            <ol>
+                {pages?.map(({ action, html_url, summary, sha, title }) => (
+                    <li>
+                        {action}
                         <a
                             target="_blank"
-                            href={`https://github.com/${repo.name}`}
+                            href={html_url}
+                            title={summary || sha}
                         >
-                            {repo.name}
+                            {title}
                         </a>
-                    </h4>
-                    <time className="pr-1" dateTime={created_at}>
-                        {new Date(created_at).toLocaleString()}
-                    </time>
-                    <strong className="pr-1">
-                        {payload.action || type.replace('Event', '')}
-                    </strong>
-                    {this.renderPayload(payload)}
-                </div>
-            </li>
-        );
-    };
+                    </li>
+                ))}
+            </ol>
+        </>
+    );
+
+    renderEvent = ({ actor, repo, created_at, payload, type }: Event) => (
+        <li key={created_at} className="d-flex align-items-center my-3">
+            <a
+                className="text-center w-25"
+                target="_blank"
+                href={`https://github.com/${actor.login}`}
+                title={actor.login}
+            >
+                <img
+                    className={`${style.logo} ${style.big}`}
+                    src={actor.avatar_url}
+                />
+                <div>{actor.display_login}</div>
+            </a>
+            <div>
+                <h4>
+                    <a target="_blank" href={`https://github.com/${repo.name}`}>
+                        {repo.name}
+                    </a>
+                </h4>
+                <time className="pe-1" dateTime={created_at}>
+                    {new Date(created_at).toLocaleString()}
+                </time>
+                <strong className="pe-1">
+                    {payload.action || type.replace('Event', '')}
+                </strong>
+                {this.renderPayload(payload)}
+            </div>
+        </li>
+    );
 
     render() {
-        const { list } = this.state;
+        const { list } = this;
 
         return (
             <div>

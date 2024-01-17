@@ -4,11 +4,12 @@
         "moduleResolution": "Node",
         "esModuleInterop": true,
         "downlevelIteration": true,
-        "experimentalDecorators": true,
-        "jsx": "react",
-        "jsxFactory": "createCell",
+        "useDefineForClassFields": true,
+        "jsx": "react-jsx",
+        "jsxImportSource": "dom-renderer",
         "lib": ["ES2020", "DOM"],
-        "target": "ES5",
+        "skipLibCheck": true,
+        "target": "ES6",
         "sourceMap": true,
         "declaration": true,
         "outDir": "dist/"
@@ -19,6 +20,6 @@
         "excludeExternals": true,
         "excludePrivate": true,
         "readme": "./ReadMe.md",
-        "out": "docs/"
+        "plugin": ["typedoc-plugin-mdn-links"]
     }
 }
