@@ -1,15 +1,18 @@
 import { observable } from 'mobx';
-import { WebCellProps, attribute, component, observer } from 'web-cell';
+import { WebCell, attribute, component, observer } from 'web-cell';
 
-export interface CommandLineProps extends WebCellProps {
+export interface CommandLineProps {
     text: string;
 }
 
+export interface CommandLine extends WebCell<CommandLineProps> {}
+
 @component({ tagName: 'command-line' })
 @observer
-export class CommandLine extends HTMLElement {
-    declare props: CommandLineProps;
-
+export class CommandLine
+    extends HTMLElement
+    implements WebCell<CommandLineProps>
+{
     @attribute
     @observable
     accessor active = false;
@@ -22,7 +25,7 @@ export class CommandLine extends HTMLElement {
     @observable
     accessor text = '';
 
-    connectedCallback() {
+    mountedCallback() {
         this.classList.add(
             'd-block',
             'rounded',
@@ -41,7 +44,7 @@ export class CommandLine extends HTMLElement {
     private timer: number;
 
     protected boot() {
-        this.timer = self.setInterval(async () => {
+        this.timer = self.setInterval(() => {
             const { text } = this;
 
             if (!text) return;

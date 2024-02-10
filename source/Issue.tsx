@@ -116,9 +116,7 @@ export class GithubIssue extends HTMLElement {
                 </aside>
                 <div className="flex-grow-1">
                     <h3>
-                        <span
-                            className={`badge badge-${IssueState[state]} me-3`}
-                        >
+                        <span className={`badge bg-${IssueState[state]} me-3`}>
                             {state}
                         </span>
                         <a target="_blank" href={html_url}>

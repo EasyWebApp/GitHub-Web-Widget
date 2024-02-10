@@ -1,7 +1,8 @@
 .editorconfig
 .eslintrc.json
 test/
-.cache/
+.parcel*
 docs/
 .vscode/
+.husky/
 .github/
