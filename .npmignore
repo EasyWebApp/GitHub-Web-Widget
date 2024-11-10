@@ -1,8 +1,4 @@
-.editorconfig
-.eslintrc.json
+.*
+eslint.config.js
 test/
-.parcel*
 docs/
-.vscode/
-.husky/
-.github/

@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "ES6",
+        "module": "ES2020",
         "moduleResolution": "Node",
         "esModuleInterop": true,
         "downlevelIteration": true,
@@ -9,12 +9,13 @@
         "jsxImportSource": "dom-renderer",
         "lib": ["ES2020", "DOM"],
         "skipLibCheck": true,
+        "checkJs": true,
         "target": "ES6",
         "sourceMap": true,
         "declaration": true,
         "outDir": "dist/"
     },
-    "include": ["source/**/*"],
+    "include": ["source/**/*", "*.mjs"],
     "typedocOptions": {
         "name": "GitHub Web Widget",
         "excludeExternals": true,
