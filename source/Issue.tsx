@@ -1,17 +1,15 @@
 import { observable } from 'mobx';
-import { WebCellProps, attribute, component, observer } from 'web-cell';
-
-import {
-    Comment,
-    Issue,
-    IssueState,
-    Repository,
-    getIssue,
-    getRepository
-} from './service';
-import { parseMarkDown } from './utility';
+import { attribute, component, observer,WebCellProps } from 'web-cell';
 
 import * as style from './common.module.less';
+import {
+    Comment,
+    getIssue,
+    getRepository,
+    Issue,
+    IssueState,
+    Repository} from './service';
+import { marked } from './utility';
 
 export interface GithubIssueProps extends WebCellProps {
     owner: string;
@@ -73,7 +71,7 @@ export class GithubIssue extends HTMLElement {
                         className={`px-1 ${style.logo}`}
                         src={user.avatar_url}
                     />
-                    <a className="px-1" target="_blank" href={user.html_url}>
+                    <a className="px-1" target="_blank" href={user.html_url} rel="noreferrer">
                         <strong>{user.login}</strong>
                     </a>
                     <span className="px-1">
@@ -85,7 +83,7 @@ export class GithubIssue extends HTMLElement {
                 </summary>
                 <div
                     className="markdown-body my-3"
-                    innerHTML={parseMarkDown(body)}
+                    innerHTML={marked.parse(body) as string}
                 />
             </details>
         );
@@ -110,7 +108,7 @@ export class GithubIssue extends HTMLElement {
                         className={`${style.logo} ${style.big}`}
                         src={owner?.avatar_url}
                     />
-                    <a target="_blank" href={owner?.html_url}>
+                    <a target="_blank" href={owner?.html_url} rel="noreferrer">
                         <strong>{owner?.login}</strong>
                     </a>
                 </aside>
@@ -119,7 +117,7 @@ export class GithubIssue extends HTMLElement {
                         <span className={`badge bg-${IssueState[state]} me-3`}>
                             {state}
                         </span>
-                        <a target="_blank" href={html_url}>
+                        <a target="_blank" href={html_url} rel="noreferrer">
                             {title}
                         </a>
                     </h3>

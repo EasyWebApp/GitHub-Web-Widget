@@ -2,14 +2,14 @@
 
 [Web Components][1] library for GitHub based on [WebCell][2]
 
-[![NPM Dependency](https://img.shields.io/librariesio/github/TechQuery/GitHub-Web-Widget.svg)][3]
-[![CI & CD](https://github.com/TechQuery/GitHub-Web-Widget/actions/workflows/main.yml/badge.svg)][4]
+[![NPM Dependency](https://img.shields.io/librariesio/github/EasyWebApp/GitHub-Web-Widget.svg)][3]
+[![CI & CD](https://github.com/EasyWebApp/GitHub-Web-Widget/actions/workflows/main.yml/badge.svg)][4]
 
 [![NPM](https://nodei.co/npm/github-web-widget.png?downloads=true&downloadRank=true&stars=true)][5]
 
 ## Demo
 
-https://tech-query.me/GitHub-Web-Widget/demo/
+https://web-cell.dev/GitHub-Web-Widget/demo/
 
 ## Components
 
@@ -74,7 +74,7 @@ npm install parcel @parcel/config-default @parcel/transformer-typescript-tsc -D
         <title>Your Blog</title>
         <link
             rel="stylesheet"
-            href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         />
         <link
             rel="stylesheet"
@@ -154,5 +154,5 @@ new DOMRenderer().render(
 [9]: http://www.newmediacampaigns.com/blog/a-beautiful-jquery-github-widget
 [10]: https://tech-query.me/GitHub-Web-Widget/interfaces/issue.githubissueprops.html
 [11]: https://tech-query.me/GitHub-Web-Widget/interfaces/eventflow.githubeventsprops.html
-[12]: https://github.com/TechQuery/GitHub-Web-Widget/blob/master/test/index.html
-[13]: https://github.com/TechQuery/GitHub-Web-Widget/blob/master/test/index.tsx
+[12]: https://github.com/EasyWebApp/GitHub-Web-Widget/blob/master/test/index.html
+[13]: https://github.com/EasyWebApp/GitHub-Web-Widget/blob/master/test/index.tsx

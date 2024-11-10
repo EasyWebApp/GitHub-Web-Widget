@@ -1,18 +1,18 @@
-import { marked } from 'marked';
+import { Marked } from 'marked';
+import { markedHighlight } from 'marked-highlight';
 import { highlight, languages } from 'prismjs';
 
-const renderer = new marked.Renderer();
+export const marked = new Marked(
+    markedHighlight({
+        highlight(code, language) {
+            language = language?.toLowerCase() || 'none';
 
-renderer.code = (code, language) => {
-    language = language?.toLowerCase() || 'none';
+            const Class = `class="language-${language}"`,
+                grammer = languages[language];
 
-    const Class = `class="language-${language}"`,
-        grammer = languages[language];
-
-    return `<pre ${Class}><code ${Class}>${
-        grammer ? highlight(code, grammer, language) : code
-    }</code></pre>`;
-};
-
-export const parseMarkDown = (raw: string) =>
-    marked(raw, { renderer }) as string;
+            return `<pre ${Class}><code ${Class}>${
+                grammer ? highlight(code, grammer, language) : code
+            }</code></pre>`;
+        }
+    })
+);
