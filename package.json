@@ -14,10 +14,10 @@
     "homepage": "https://tech-query.me/GitHub-Web-Widget/",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/TechQuery/GitHub-Web-Widget.git"
+        "url": "git+https://github.com/EasyWebApp/GitHub-Web-Widget.git"
     },
     "bugs": {
-        "url": "https://github.com/TechQuery/GitHub-Web-Widget/issues"
+        "url": "https://github.com/EasyWebApp/GitHub-Web-Widget/issues"
     },
     "source": "source/index.ts",
     "types": "dist/index.d.ts",
